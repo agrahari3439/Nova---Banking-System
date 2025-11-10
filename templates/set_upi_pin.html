@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5" style="max-width: 450px;">
+  <div class="card shadow-lg border-0">
+    <div class="card-header text-center text-white fw-bold"
+         style="background: linear-gradient(135deg, #004aad, #0078d7);">
+      🔑 Set / Reset UPI PIN
+    </div>
+    <div class="card-body">
+      <form method="POST">
+        <div class="mb-3">
+          <label>Enter New 6-Digit UPI PIN</label>
+          <input type="password" name="new_pin" maxlength="6" minlength="6" pattern="\d{6}" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+          <label>Confirm UPI PIN</label>
+          <input type="password" name="confirm_pin" maxlength="6" minlength="6" pattern="\d{6}" class="form-control" required>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary fw-bold"
+                  style="background: linear-gradient(90deg, #0078d7, #00b4d8); border:none;">
+            Save PIN
+          </button>
+        </div>
+      </form>
+
+      <div class="text-center mt-3">
+        <a href="/dashboard" style="color:#004aad;">⬅ Back to Dashboard</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+

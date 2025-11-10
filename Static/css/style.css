@@ -1,0 +1,57 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  background: linear-gradient(120deg, #004aad, #00b8a9);
+  color: #333;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  width: 420px;
+  margin: 60px auto;
+  background: white;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.15);
+  padding: 30px;
+}
+
+input, button {
+  width: 90%;
+  padding: 12px;
+  margin: 10px 0;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+button {
+  background: linear-gradient(90deg, #004aad, #00b8a9);
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+/* Optional: nicer warning banner */
+.alert-warning {
+  background:#fff3cd;
+  color:#664d03;
+  border:1px solid #ffecb5;
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+
+form.bg-light input, form.bg-light select {
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  transition: 0.2s;
+}
+
+form.bg-light input:focus, form.bg-light select:focus {
+  border-color: #0078d7;
+  box-shadow: 0 0 5px rgba(0, 120, 215, 0.3);
+}
+

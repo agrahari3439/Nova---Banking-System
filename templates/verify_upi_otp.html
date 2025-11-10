@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-5" style="max-width: 420px;">
+  <div class="card shadow-lg border-0 rounded-4">
+    <div class="card-header text-center text-white fw-bold"
+         style="background: linear-gradient(135deg, #0078d7, #00b4d8);">
+      🔐 Verify OTP
+    </div>
+    <div class="card-body">
+      <form method="POST" action="/verify_upi_otp">
+        <input type="hidden" name="phone" value="{{ phone }}">
+        
+        <div class="form-group mb-3">
+          <label class="fw-semibold">Enter the OTP sent to your WhatsApp</label>
+          <input type="text" name="otp" class="form-control form-control-lg" maxlength="6" minlength="6" required>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-primary btn-lg fw-bold"
+                  style="background: linear-gradient(90deg, #0078d7, #00b4d8); border: none;">
+            Verify OTP
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}
