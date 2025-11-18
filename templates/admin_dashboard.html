@@ -1,0 +1,54 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container py-4">
+  <h2 class="fw-bold text-center mb-4">🏦 Admin Dashboard</h2>
+
+  <div class="card shadow rounded-4 p-4">
+    <h4 class="fw-bold text-primary">All Bank Users</h4>
+
+    <table class="table table-hover mt-3 text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>Account No</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th>Phone</th>
+          <th>Balance (₹)</th>
+          <th>Deposit</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in users %}
+        <tr>
+          <td>{{ u[0] }}</td>
+          <td>{{ u[1] }}</td>
+          <td>{{ u[2] }}</td>
+          <td>{{ u[3] }}</td>
+          <td>{{ "%.2f"|format(u[4] | float) }}</td>
+
+          <td>
+            <form method="POST" action="/admin_deposit_request" class="d-flex">
+            <input type="hidden" name="account_number" value="{{ u[0] }}">
+            <input type="number" name="amount" class="form-control form-control-sm me-2"
+            placeholder="₹ Amount" required>
+            <button class="btn btn-success btn-sm">Deposit</button>
+            </form>
+
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="text-center mt-4">
+      <a href="/admin_transactions" class="btn btn-info px-4">📜 View All Transactions</a>
+    </div>
+
+    <div class="text-center mt-4">
+      <a href="/logout" class="btn btn-danger px-4">Logout Admin</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

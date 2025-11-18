@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4" style="max-width: 650px;">
+  <div class="card shadow-lg border-0 rounded-4">
+    <div class="card-header text-center text-white fw-bold"
+         style="background: linear-gradient(135deg, #004aad, #0078d7);">
+      🏦 Create New MyBank Account
+    </div>
+    <div class="card-body">
+      <form method="POST">
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label>Name</label>
+            <input type="text" name="name" class="form-control" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Email</label>
+            <input type="email" name="email" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label>Phone</label>
+            <input type="text" name="phone" maxlength="10" pattern="\d{10}" class="form-control" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Date of Birth</label>
+            <input type="date" name="dob" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label>Address</label>
+          <input type="text" name="address" class="form-control" required>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6 mb-3">
+            <label>Username</label>
+            <input type="text" name="username" class="form-control" required>
+          </div>
+          <div class="col-md-6 mb-3">
+            <label>Password</label>
+            <input type="password" name="password" class="form-control" required>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label>Set 6-Digit UPI PIN</label>
+          <input type="password" name="upi_pin" maxlength="6" minlength="6" pattern="\d{6}" class="form-control" required>
+        </div>
+
+        <div class="d-grid">
+          <button type="submit" class="btn btn-success fw-bold"
+                  style="background: linear-gradient(90deg, #00b894, #00cec9); border:none;">
+            Register
+          </button>
+        </div>
+      </form>
+
+      <div class="text-center mt-3">
+        <a href="/login" style="color:#004aad;">Already have an account? Login</a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+
+
+

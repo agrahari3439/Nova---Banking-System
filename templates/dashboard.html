@@ -1,0 +1,245 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container py-4">
+
+  <!-- Welcome Card -->
+  <div class="card shadow-lg border-0 rounded-4 mb-4">
+    <div class="card-header text-white fw-bold text-center fs-4"
+         style="background: linear-gradient(135deg, #004aad, #0078d7);">
+      👋 Welcome, {{ user[3] }}
+    </div>
+
+    <div class="card-body">
+      <div class="row align-items-center">
+
+        <!-- Profile Photo -->
+        <div class="col-md-4 text-center">
+          <form action="/upload_profile" method="POST" enctype="multipart/form-data" id="profileForm">
+            <input type="file" name="profile_pic" id="profileInput" accept="image/*" style="display:none;" onchange="document.getElementById('profileForm').submit();">
+
+            <img src="{{ url_for('static', filename='profile_pics/' + (user[9] if user[9] else 'default.png')) }}"
+                 alt="Profile Photo"
+                 id="profileImage"
+                 class="rounded-circle shadow-sm"
+                 width="140" height="140"
+                 style="object-fit: cover; border: 3px solid #0078d7; cursor: pointer;"
+                 title="Click to change photo">
+
+            <p class="text-muted small mt-2">Click the image to update your photo</p>
+          </form>
+        </div>
+
+        <!-- User Info -->
+        <div class="col-md-8">
+          <h5><strong>Account Number:</strong> {{ user[0] }}</h5>
+          <p><strong>Email:</strong> {{ user[4] }}</p>
+          <p><strong>Phone:</strong> {{ user[5] }}</p>
+          <p><strong>Address:</strong> {{ user[8] }}</p>
+
+          <div class="alert alert-info mt-3 fs-5 fw-bold shadow-sm text-center">
+            💰 Current Balance: ₹{{ "%.2f"|format(user[10] | float) }}
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- Click script -->
+  <script>
+    document.getElementById("profileImage").addEventListener("click", () => {
+      document.getElementById("profileInput").click();
+    });
+  </script>
+
+  <!-- Quick Actions -->
+  <div class="row g-4">
+
+    <!-- Withdraw -->
+    <div class="col-md-4">
+      <div class="card border-0 shadow rounded-4 h-100 text-center">
+        <div class="card-body">
+          <h5 class="fw-bold text-danger mb-3">🏧 Withdraw Money</h5>
+          <button class="btn btn-danger w-100" data-bs-toggle="collapse" data-bs-target="#withdrawForm">Withdraw</button>
+
+          <div id="withdrawForm" class="collapse mt-3">
+            <form method="POST" action="/withdraw">
+              <input type="number" name="amount" min="1" step="0.01" class="form-control mb-2" placeholder="Amount" required>
+              <input type="password" name="upi_pin" maxlength="6" class="form-control mb-2" placeholder="6-digit UPI PIN" required>
+              <button class="btn btn-danger w-100">Confirm Withdraw</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Transfer -->
+    <div class="col-md-4">
+      <div class="card border-0 shadow rounded-4 h-100 text-center">
+        <div class="card-body">
+          <h5 class="fw-bold text-warning mb-3">💸 Transfer Money</h5>
+
+          <button class="btn w-100 text-white fw-bold"
+                  style="background: linear-gradient(90deg, #ff9800, #ffb300); border:none;"
+                  data-bs-toggle="collapse" data-bs-target="#transferForm">Transfer</button>
+
+          <div id="transferForm" class="collapse mt-3">
+            <form method="POST" action="/transfer">
+              <input type="text" name="receiver_name" class="form-control mb-2" placeholder="Receiver Name" required>
+              <input type="text" name="receiver_account" class="form-control mb-2" placeholder="Receiver Account" required>
+              <input type="number" name="amount" min="1" step="0.01" class="form-control mb-2" placeholder="Amount" required>
+              <input type="password" name="upi_pin" maxlength="6" class="form-control mb-2" placeholder="6-digit UPI PIN" required>
+              <button class="btn w-100 text-white fw-bold" style="background: linear-gradient(90deg, #ff9800, #ffb300); border:none;">Confirm Transfer</button>
+            </form>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Account Settings -->
+  <div class="d-flex flex-wrap justify-content-center mt-4 gap-3">
+    <a href="/set_upi_pin" class="btn btn-secondary px-4">🔑 Set / Reset UPI PIN</a>
+    <a href="/logout" class="btn btn-outline-dark px-4">🚪 Logout</a>
+  </div>
+
+  <!-- Transaction History -->
+  <div class="col-12 mt-4">
+    <div class="card border-0 shadow rounded-4 text-center">
+      <div class="card-body">
+        <h5 class="fw-bold text-info mb-3">📜 Transaction History</h5>
+
+        <button id="toggleTransactions" class="btn w-100 fw-bold text-white"
+                style="background: linear-gradient(90deg, #00bcd4, #0097a7); border:none;"
+                type="button" data-bs-toggle="collapse" data-bs-target="#transactionHistory">
+          📜 View Transactions
+        </button>
+
+        <!-- Filters -->
+        <form method="POST" class="p-3 bg-light rounded-3 shadow-sm mb-3">
+          <div class="row g-2 align-items-end">
+
+            <div class="col-md-2">
+              <label class="form-label fw-semibold">Type</label>
+              <select name="txn_type" class="form-select">
+                <option value="All">All</option>
+                <option value="Deposit">Deposit</option>
+                <option value="Withdraw">Withdraw</option>
+                <option value="Transfer">Transfer</option>
+                <option value="Received">Received</option>
+              </select>
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label fw-semibold">From</label>
+              <input type="date" name="date_from" class="form-control">
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label fw-semibold">To</label>
+              <input type="date" name="date_to" class="form-control">
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label fw-semibold">Min ₹</label>
+              <input type="number" name="min_amount" class="form-control" placeholder="0">
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label fw-semibold">Max ₹</label>
+              <input type="number" name="max_amount" class="form-control" placeholder="10000">
+            </div>
+
+            <div class="col-md-2">
+              <label class="form-label fw-semibold">Account No</label>
+              <input type="text" name="account_search" class="form-control" placeholder="Search">
+            </div>
+
+            <div class="col-12 text-end mt-3">
+              <button class="btn btn-primary fw-bold px-4" style="background: linear-gradient(90deg, #0078d7, #00b4d8); border:none;">🔍 Apply Filters</button>
+              <a href="/dashboard" class="btn btn-outline-secondary px-4">🔄 Reset</a>
+            </div>
+
+          </div>
+        </form>
+
+        <!-- ⭐ NEW — DOWNLOAD BUTTON -->
+        <a href="/download_statement" class="btn btn-success mb-3 fw-bold px-4">
+          📄 Download Mini Statement (PDF)
+        </a>
+
+        <!-- History Table -->
+        <div id="transactionHistory" class="collapse mt-4">
+          {% if transactions %}
+          <div class="table-responsive">
+            <table class="table table-striped table-hover align-middle text-center">
+              <thead class="table-primary">
+                <tr>
+                  <th>Date</th>
+                  <th>Type</th>
+                  <th>Amount (₹)</th>
+                  <th>Sender Account</th>
+                  <th>Receiver Account</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for t in transactions %}
+                <tr>
+                  <td>{{ t[5] }}</td>
+                  <td>
+                    {% if t[2] == 'Deposit' %}
+                      <span class="badge bg-success">{{ t[2] }}</span>
+                    {% elif t[2] == 'Withdraw' %}
+                      <span class="badge bg-danger">{{ t[2] }}</span>
+                    {% elif t[2] == 'Transfer' %}
+                      <span class="badge bg-warning text-dark">{{ t[2] }}</span>
+                    {% elif t[2] == 'Received' %}
+                      <span class="badge bg-info text-dark">{{ t[2] }}</span>
+                    {% endif %}
+                  </td>
+                  <td>₹{{ "%.2f"|format(t[3]) }}</td>
+                  <td>{% if t[2] == 'Received' %}{{ t[4] }}{% else %}-{% endif %}</td>
+                  <td>{% if t[2] == 'Transfer' %}{{ t[4] }}{% else %}-{% endif %}</td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+          {% else %}
+          <p class="text-muted">No transactions yet.</p>
+          {% endif %}
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Button Text Change -->
+<script>
+document.addEventListener("DOMContentLoaded", () => {
+  const collapseEl = document.getElementById('transactionHistory');
+  const toggleBtn = document.getElementById('toggleTransactions');
+
+  const bsCollapse = new bootstrap.Collapse(collapseEl, { toggle: false });
+
+  toggleBtn.addEventListener('click', () => {
+    if (collapseEl.classList.contains('show')) bsCollapse.hide();
+    else bsCollapse.show();
+  });
+
+  collapseEl.addEventListener('shown.bs.collapse', () => {
+    toggleBtn.innerHTML = '📄 Hide Transactions';
+  });
+
+  collapseEl.addEventListener('hidden.bs.collapse', () => {
+    toggleBtn.innerHTML = '📜 View Transactions';
+  });
+});
+</script>
+
+{% endblock %}

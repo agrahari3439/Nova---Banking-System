@@ -1,0 +1,126 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container py-4">
+  <h2 class="fw-bold text-center mb-4 text-info">📜 All Bank Transactions</h2>
+
+  <!-- FILTERS -->
+  <div class="card shadow-sm p-4 mb-4 border-0 rounded-4">
+
+    <form method="POST">
+      <div class="row g-3">
+
+        <!-- Transaction Type -->
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Type</label>
+          <select name="txn_type" class="form-select">
+            <option value="All">All</option>
+            <option value="Deposit">Deposit</option>
+            <option value="Withdraw">Withdraw</option>
+            <option value="Transfer">Transfer</option>
+            <option value="Received">Received</option>
+            <option value="Admin Deposit">Admin Deposit</option>
+          </select>
+        </div>
+
+        <!-- Date From -->
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">From</label>
+          <input type="date" name="date_from" class="form-control">
+        </div>
+
+        <!-- Date To -->
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">To</label>
+          <input type="date" name="date_to" class="form-control">
+        </div>
+
+        <!-- Min Amount -->
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Min ₹</label>
+          <input type="number" name="min_amount" class="form-control" placeholder="0">
+        </div>
+
+        <!-- Max Amount -->
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Max ₹</label>
+          <input type="number" name="max_amount" class="form-control" placeholder="100000">
+        </div>
+
+        <!-- Account No Search -->
+        <div class="col-md-2">
+          <label class="form-label fw-semibold">Account No</label>
+          <input type="text" name="acc_search" class="form-control" placeholder="Search...">
+        </div>
+
+      </div>
+
+      <div class="text-end mt-3">
+        <button class="btn btn-primary fw-bold px-4">🔍 Apply Filters</button>
+        <a href="/admin_transactions" class="btn btn-outline-secondary px-4">Reset</a>
+      </div>
+    </form>
+
+  </div>
+
+  <!-- TRANSACTION TABLE -->
+  <div class="card shadow p-4 rounded-4">
+
+    <table class="table table-hover text-center">
+      <thead class="table-dark">
+        <tr>
+          <th>ID</th>
+          <th>Account No</th>
+          <th>Type</th>
+          <th>Amount (₹)</th>
+          <th>Receiver</th>
+          <th>Date</th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for t in transactions %}
+        <tr>
+          <td>{{ t[0] }}</td>
+          <td>{{ t[1] }}</td>
+
+          <td>
+            {% if t[2] == 'Deposit' %}
+              <span class="badge bg-success">{{ t[2] }}</span>
+
+            {% elif t[2] == 'Withdraw' %}
+              <span class="badge bg-danger">{{ t[2] }}</span>
+
+            {% elif t[2] == 'Transfer' %}
+              <span class="badge bg-warning text-dark">{{ t[2] }}</span>
+
+            {% elif t[2] == 'Received' %}
+              <span class="badge bg-info text-dark">{{ t[2] }}</span>
+
+            {% elif t[2] == 'Admin Deposit' %}
+              <span class="badge bg-primary">{{ t[2] }}</span>
+
+            {% else %}
+              {{ t[2] }}
+            {% endif %}
+          </td>
+
+          <td>₹{{ "%.2f"|format(t[3]) }}</td>
+          <td>{{ t[4] if t[4] else "-" }}</td>
+          <td>{{ t[5] }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+
+    </table>
+
+    <div class="text-center mt-4">
+      <a href="/admin_dashboard" class="btn btn-secondary px-4">⬅ Back to Dashboard</a>
+    </div>
+
+  </div>
+</div>
+
+{% endblock %}
+
+

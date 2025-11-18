@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container py-5">
+  <div class="col-md-4 offset-md-4">
+    <div class="card shadow p-4">
+      <h3 class="text-center fw-bold mb-3">Admin Login</h3>
+
+      <form method="POST" action="/admin_login">
+        <input type="text" name="username" class="form-control mb-3" placeholder="Admin Username" required>
+        <input type="password" name="password" class="form-control mb-3" placeholder="Password" required>
+        <button class="btn btn-primary w-100">Login</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% endblock %}
