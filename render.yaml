@@ -1,0 +1,44 @@
+services:
+  - type: web
+    name: nova-banking-system
+    env: python
+    region: singapore   # choose closest region
+    plan: free
+    branch: main
+
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
+
+    envVars:
+      - key: FLASK_ENV
+        value: production
+
+      - key: SECRET_KEY
+        generateValue: true
+
+      - key: DB_HOST
+        fromDatabase:
+          name: nova-db
+          property: host
+
+      - key: DB_USER
+        fromDatabase:
+          name: nova-db
+          property: user
+
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: nova-db
+          property: password
+
+      - key: DB_NAME
+        fromDatabase:
+          name: nova-db
+          property: database
+
+databases:
+  - name: nova-db
+    region: singapore
+    plan: free
+    databaseName: nova
+    user: admin
